@@ -22,8 +22,7 @@ static void set_angle2(void * obj, int32_t v)
 }
 
 void interface_init(){
-    //lv_obj_set_style_bg_color ( lv_screen_active() , lv_palette_darken(LV_PALETTE_GREY,4),0) ;
-
+    lv_obj_set_style_bg_color ( lv_screen_active() , lv_palette_darken(LV_PALETTE_GREY,4),0) ;
 
     /*Cpu ark*/
     cpu_arc = lv_arc_create(lv_screen_active());
