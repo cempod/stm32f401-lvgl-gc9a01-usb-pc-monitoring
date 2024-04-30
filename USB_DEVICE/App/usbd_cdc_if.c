@@ -267,14 +267,20 @@ static int8_t CDC_Receive_FS(uint8_t* Buf, uint32_t *Len)
   /*USBD_CDC_SetRxBuffer(&hUsbDeviceFS, &Buf[0]);
   
   */
+  /*PC data*/
   if(*Len==4){
     cpu_temp = (uint8_t)Buf[0];
     gpu_temp = (uint8_t)Buf[1];
     cpu_load = (uint8_t)Buf[2];
     gpu_load = (uint8_t)Buf[3];
-    HAL_GPIO_TogglePin(LED_GPIO_Port,LED_Pin);
-    USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   }
+  /*HANDSHAKE*/
+  if(*Len==2){
+    if(Buf[0]==6&&Buf[1]==9){
+      CDC_Transmit_FS((uint8_t *)"OK",2);
+    }
+  }
+  USBD_CDC_ReceivePacket(&hUsbDeviceFS);
   return (USBD_OK);
   /* USER CODE END 6 */
 }
