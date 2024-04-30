@@ -11,6 +11,7 @@ lv_obj_t * gpu_arc;
 lv_anim_t gpu_arc_anim;
 lv_obj_t * gpu_pct;
 lv_obj_t * gpu_temp_label;
+lv_obj_t * usb_connection_label;
 
 static void set_angle(void * obj, int32_t v)
 {
@@ -153,10 +154,17 @@ void interface_init(){
     lv_obj_align(gpu_temp_label, LV_ALIGN_CENTER, 60, 0);
     lv_obj_set_style_text_color(gpu_temp_label,lv_palette_main(LV_PALETTE_PURPLE),0); 
     lv_obj_set_style_text_font(gpu_temp_label,&lv_font_montserrat_30,0);
-    set_cpu_temp(0);
-    set_gpu_temp(0);
-    set_cpu_load(0,0);
-    set_gpu_load(0,0);
+
+    /*Usb connection label*/
+    usb_connection_label = lv_label_create(lv_screen_active());
+    lv_label_set_long_mode(usb_connection_label, LV_LABEL_LONG_WRAP); 
+    lv_label_set_text(usb_connection_label, LV_SYMBOL_USB);
+    lv_obj_set_width(usb_connection_label, 70); 
+    lv_obj_set_style_text_align(usb_connection_label, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(usb_connection_label, LV_ALIGN_CENTER, 0, -100);
+    lv_obj_set_style_text_color(usb_connection_label,lv_palette_main(LV_PALETTE_RED),0); 
+    //lv_obj_set_style_text_font(usb_connection_label,&lv_font_montserrat_30,0);
+
 }
 
 void set_cpu_temp(uint32_t temp){
@@ -178,4 +186,25 @@ void set_gpu_load(uint32_t load, uint32_t load_old){
     lv_anim_start(&gpu_arc_anim);
     sprintf(pct,"%i%%",(int)load);
     lv_label_set_text(gpu_pct, pct);
+}
+void set_usb_status(uint8_t status){
+    switch (status){
+    case USB_OK:
+        lv_label_set_text(usb_connection_label, "");
+        break;
+    case USB_DISCONNECTED:
+        lv_label_set_text(usb_connection_label, LV_SYMBOL_USB);
+        set_cpu_temp(0);
+        set_gpu_temp(0);
+        set_cpu_load(0,0);
+        set_gpu_load(0,0);
+        break;
+    default:
+        lv_label_set_text(usb_connection_label, LV_SYMBOL_USB);
+        set_cpu_temp(0);
+        set_gpu_temp(0);
+        set_cpu_load(0,0);
+        set_gpu_load(0,0);
+        break;
+    }
 }

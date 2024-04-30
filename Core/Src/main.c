@@ -53,6 +53,8 @@ uint32_t cpu_temp_last = 0;
 uint32_t cpu_load_last = 0;
 uint32_t gpu_temp_last = 0;
 uint32_t gpu_load_last = 0;
+
+uint32_t connection_tick = 2500;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -142,6 +144,12 @@ int main(void)
       set_gpu_load(gpu_load,gpu_load_last);
       gpu_load_last=gpu_load;
     }
+    if(connection_tick>=2500){
+      connection_tick=2500;
+      set_usb_status(USB_DISCONNECTED);
+    }else{
+      set_usb_status(USB_OK);
+    }
     CDC_Transmit_FS((unsigned char*)msg,strlen(msg));
     HAL_Delay(50);
     /* USER CODE END WHILE */
@@ -209,7 +217,8 @@ void my_disp_flush(lv_display_t * disp, const lv_area_t * area, uint8_t * color_
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
         if(htim->Instance == TIM3) //check if the interrupt comes from TIM1
-        {       
+        {     
+          connection_tick++;  
           lv_tick_inc(1);
         }
         if(htim->Instance == TIM4)
