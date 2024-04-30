@@ -110,8 +110,6 @@ int main(void)
   /* USER CODE BEGIN 2 */
   display_Init();
   lv_init();
-  char msg[50];
-  sprintf(msg,"Hello Alan from Blackpill\r\n");
 
   display = lv_display_create(240, 240);
   static lv_color_t buf1[240 * 240 / 10];                        /*Declare a buffer for 1/10 screen size*/
@@ -150,7 +148,6 @@ int main(void)
     }else{
       set_usb_status(USB_OK);
     }
-    CDC_Transmit_FS((unsigned char*)msg,strlen(msg));
     HAL_Delay(50);
     /* USER CODE END WHILE */
 
