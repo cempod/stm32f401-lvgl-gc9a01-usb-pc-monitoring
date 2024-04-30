@@ -1,0 +1,1 @@
+openocd -f interface/stlink.cfg -f target/stm32f4x.cfg -c "program E:/programming/pc_monitoring/build/MinSizeRel/pc_monitoring.elf verify reset exit"
